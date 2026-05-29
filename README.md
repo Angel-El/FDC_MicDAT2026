@@ -12,6 +12,10 @@ This framework accompanies the paper submitted to **MicDAT 2026**: *"Analysis an
 * **Automated Verification Flow:** Seamless parsing and post-processing engine optimized to handle both behavioral internal tracking and external Spectre transient simulation logfiles. The complete execution pipeline matches the flow illustrated in **Fig. 2** of the paper.
 
 ---
+The entire simulation environment is driven by a matrix execution approach structured around two main configuration levers: the **Total Simulation Time (T_sim)** and the **Number of Input Currents (M)**. 
+
+Since the external synchronization window (SYNC) is fixed at T_int = 100 us, simulating a total time of T_sim = 1 ms will automatically yield 10 consecutive integration conversion cycles. Furthermore, given the main clock frequency of 100 MHz, each individual 100 us integration window precisely evaluates 10,000 clock cycles (N samples). By tweaking these parameters, the testbench generates an input data matrix of size M x N—where M represents the input current steps and N represents the total discrete temporal samples. Adjusting this matrix geometry allows you to compute all the target metrics:
+
 
 ## 📊 How to Reproduce Paper Results
 
