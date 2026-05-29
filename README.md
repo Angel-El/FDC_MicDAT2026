@@ -33,7 +33,7 @@ The simulation framework is highly parameterized. To replicate the exact quantit
 
 ### 3. Input-Referred Noise Floor Analysis
 * **Objective:** Characterize worst-case charge noise under dark conditions (Ipd = 0 nA).
-* **Recommended Settings:** Configure a coarse array of just a few current samples (e.g., 5 input current steps), since the noise floor analysis focuses exclusively on the first operational point fixed at the hardware baseline pedestal current (Itotal = Ioffset = 8.4 nA), worst case.
+* **Recommended Settings:** Firs, enable all input noise sources. Then, configure a coarse array of just a few current samples (e.g., 5 input current steps), since the noise floor analysis focuses exclusively on the first operational point fixed at the hardware baseline pedestal current (Itotal = Ioffset = 8.4 nA), worst case.
 * **Total Simulation Time (T_sim):** Maximize the simulation run to T_sim = 6 ms or more (simulating 60+ consecutive integration windows). Accumulating a longer temporal profile is crucial to achieve the statistical realism required for accurate time-domain noise abstraction.
 
 ## 💻 Prerequisites & Installation
