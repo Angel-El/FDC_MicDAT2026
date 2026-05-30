@@ -19,7 +19,7 @@ Since the external synchronization window (SYNC) is fixed at T_int = 100 us, sim
 
 ## 📊 How to Reproduce Paper Results
 
-The simulation framework is highly parameterized. To replicate the exact quantitative verification benchmarks described in the paper, adjust the top-level testbench script by modifying the total simulation time (T_sim) while keeping the physical integration window fixed at T_int = 100 us:
+The simulation framework is highly parameterized. To replicate the exact quantitative verification benchmarks described in the paper, adjust the top-level testbench script by modifying the total simulation time (T_sim) and the number of input currents (and the step) while keeping the physical integration window fixed at T_int = 100 us:
 
 ### 1. Intrinsic INL (Integral Non-Linearity) Evaluation
 * **Objective:** Capture structural loop non-linearity across the entire dynamic range (0 nA to 175 nA).
