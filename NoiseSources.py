@@ -41,11 +41,6 @@ tau_preamp = R_dpreamp * C_lpreamp
 A0_preamp = gm_preamp * R_dpreamp
 gamma = 2/3  # Noise factor for a MOSFET in saturation
 
-# --- COMPARATOR PHYSICAL PARAMETERS ---
-
-# gm_comp =   # OTA Transconductance (1 mS)
-# R_comp =
-# Cl_comp =
 
 # Noise enablers
 enable_noise_quant = 1
@@ -59,39 +54,38 @@ enable_noise_ota = 1
 # Quantization Noise
 Qres = Ioffset * Tclk
 Q_n2_quant = (Qres/np.sqrt(12))**2
-print('Varianza Ruido Quantización Q_n2_quant: ', Q_n2_quant)
+print('variance of Quantization noise, Q_n2_quant: ', Q_n2_quant)
 
 # Charge Pump Noise
 Qcp = np.sqrt(k * T * C_cp)
 Vcp_rms = Qcp / C_int
 Q_n2_cp = (Vcp_rms * C_int)**2
-print('Varianza Ruido cp Q_n2_cp: ', Q_n2_cp)
+print('Variance of CP noise, Q_n2_cp: ', Q_n2_cp)
 
 
 # Reference Noise
 Vn_ref_rms = 1e-6*Vref
 Q_n2_ref = (Vn_ref_rms * C_int)**2
-print("Varianza Ruido ref Q_n2_ref: ", Q_n2_ref)
+print("Variance of reference noise, Q_n2_ref: ", Q_n2_ref)
 
 
 # Preamplifier Noise
 v_n2_preamp = (16*k*T*1.15)/(3*gm_preamp*4*tau_preamp)
-print("v_n2_preamp: ", v_n2_preamp)
 Q_n2_preamp = (v_n2_preamp * C_int**2)
-print("Varianza Ruido preamp Q_n2_preamp: ", Q_n2_preamp)
+print("Variance of preamp noise, Q_n2_preamp: ", Q_n2_preamp)
 
 
 # Comparator Noise
 Vncomparator_rms = 0.256e-3
 Q_n2_comp = ((Vncomparator_rms/A0_preamp) * C_int)**2
-print("Varianza Ruido comp Q_n2_comp: ", Q_n2_comp)
+print("Variance of comparator noise, Q_n2_comp: ", Q_n2_comp)
 
 
 # OTA Noise
 Vn_ota_rms = 67e-6
 fc_ota = 1/(2*np.pi*R_ota*Cl_ota)  # OTA corner frequency (fc)
 Q_n2_ota = (Vn_ota_rms * C_int)**2
-print("Varianza Ruido ota Q_n2_ota: ", Q_n2_ota)
+print("Variance of OTA noise, Q_n2_ota: ", Q_n2_ota)
 
 # Ioffset Noise
 
@@ -155,7 +149,7 @@ if __name__ == "__main__":
     In_ioffset_rms = calculo_ruido_ioffset(Tint, Tobs, fc)
 
 Q_n2_ioffset = (In_ioffset_rms * Tint)**2
-print("Varianza Ruido Ioffset Q_n2_ioffset: ", Q_n2_ioffset)
+print("Variance of Ioffset noise, Q_n2_ioffset: ", Q_n2_ioffset)
 
 # Total Noise
 Qtotal = np.sqrt((Q_n2_quant*enable_noise_quant) + (Q_n2_cp*enable_noise_cp) + (Q_n2_ref*enable_noise_ref) + (Q_n2_preamp*enable_noise_preamp) +
@@ -174,12 +168,12 @@ valores_individuales = [
 datos_tabla = {
     "Noise Source": [
         "Quantization",
-        "Ioffset noise (Flicker and White)",
-        "ota noise (Thermal)",
-        "preamp noise (Thermal)",
-        "Comparator noise (Thermal)",
-        "Charge Pump noise (Thermal)",
-        "Reference noise (Thermal)"
+        "Ioffset noise ",
+        "ota noise ",
+        "preamp noise ",
+        "Comparator noise ",
+        "Charge Pump noise ",
+        "Reference noise "
     ],
     "Status (Enabled/Disabled)": [
         "Enabled" if enable_noise_quant == 1 else "Disabled",

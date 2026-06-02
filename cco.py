@@ -32,7 +32,7 @@ class CCO_preamp:
         self.V_diff_max = 2.7            # Represents a saturated output stage
         self.V_diff_min = -2.7
 
-    def integrar_fila(self, Iin_matrix, Vcpnoisy, vref_comparator_noisy, ota_noise, Thermal_noise_preamp):
+    def integrar_fila(self, Iin_matrix, Vcpnoisy, vref_comparator_noisy, ota_noise, noise_preamp):
         """
         Executes row-by-row temporal integration of the FDC loop.
 
@@ -77,8 +77,8 @@ class CCO_preamp:
 
             # 2. DIFFERENTIAL PREAMPLIFIER MODELING
             # Compute input voltage with randomized time-domain noise parameters
-            v_in_preamp = (v + np.random.normal(0, ota_noise, size=filas) +
-                           np.random.normal(0, Thermal_noise_preamp, size=filas)) - self.Vref
+            v_in_preamp = (v + ota_noise[:, c] +
+                           noise_preamp[:, c]) - self.Vref
 
             # Target amplified output generation (Rd + gm network)
             # The signal updates through open-loop gain, while the noise floor
