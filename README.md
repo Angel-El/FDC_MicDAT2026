@@ -6,6 +6,17 @@ This repository contains the custom, clock-cycle-accurate Python behavioral simu
 
 This framework accompanies the paper submitted to **MicDAT 2026**: *"Analysis and Pre-Silicon Verification of a FDC based CT Detector IC With Integrated Photodiode"*.
 
+
+## Repository Script Architecture
+
+To facilitate the pre-silicon verification and post-layout benchmarking of the FDC loop, the codebase is structured into the following specialized Python modules:
+
+*   **`SIM_CCO.py`**: The main execution script of the behavioral simulation framework. It configures the global loop setup, controls the transient simulation execution, sweeps the input current parameters, and evaluates the top-level performance metrics of the converter.
+*   **`cco.py`**: A core object-oriented library that defines the internal behavioral blocks of the Current-Controlled Oscillator (CCO) and the feedback network. It explicitly models the clock-cycle-accurate dynamics of the sub-blocks, including charge integration, active amplification, high-speed comparison, and charge-pump (CP) synchronous current injection. This file is automatically imported and executed by `SIM_CCO.py`.
+*   **`NoiseSources.py`**: A theoretical analytical tool dedicated to calculating the mathematical noise floor contributions of individual analog frontend blocks. It estimates noise power spectral densities to predict architectural performance limiters.
+*   **`ProcessingCadenceData.py`**: A post-processing utility designed to parse and evaluate transient simulation data exported as a `.csv` matrix from **Cadence Spectre**. By importing raw foundry data (input photodiode currents, $n_{CP}$ pulse counts, $SYNC$ signal states, and transient time steps), this script extracts the fine frequency-to-digital metrics ($n_{FL}$, time between first and last nCP within integration window). This enables a direct, high-fidelity accuracy benchmarking between the theoretical Python behavioral model and the physical transistor-level implementation.
+
+
 ## 🚀 Key Features
 * **Clock-Cycle-Accurate Simulation:** Discretizes continuous-time integration into synchronous temporal steps ($T_{\text{clk}} = 10\text{ ns}$), completely bypassing matrix-based differential equations.
 * **Encapsulated Circuit Dynamics:** Internalizes CCO node dynamics, preamplifier open-loop gain modeling, and voltage-domain noise injection within a single object-oriented class execution.
@@ -23,18 +34,18 @@ The simulation framework is highly parameterized. To replicate the exact quantit
 
 ### 1. Intrinsic INL (Integral Non-Linearity) Evaluation
 * **Objective:** Capture structural loop non-linearity across the entire dynamic range (0 nA to 175 nA).
-* **Recommended Settings:** Configure a fine input current sweep array (e.g., set 500 current points (muestras)).
+* **Recommended Settings:** First, you have to disable all the noise sources. Then, configure a fine input current sweep array (e.g., set 500 current points (muestras)).
 * **Total Simulation Time (T_sim):** Set T_sim = 1 ms (which corresponds to simulating 10 consecutive integration windows). This provides enough statistical averaging for macroscopic structural metrics while keeping the sweep computationally efficient.
 
 ### 2. Charge Resolution (Qres / Qlsb) Verification
 * **Objective:** Validate the precise quantization packet sizing and threshold-crossing dynamics.
 * **Recommended Settings:** Maintain the highest time-step precision configuration to minimize discrete quantization errors during comparator firing evaluations. set stop at 9nA and 60 currents, to have a fine delta input current.
-* **Total Simulation Time (T_sim):** A long simulation run is **not required**. Set T_sim = 700 us (simulating just the very first integration window). The framework extracts the exact charge resolution metrics directly from this initial window execution.
+* **Total Simulation Time (T_sim):** A long simulation run is **not required**. Set T_sim = 800 us (simulating just the very first integration window). The framework extracts the exact charge resolution metrics directly from this initial window execution.
 
 ### 3. Input-Referred Noise Floor Analysis
 * **Objective:** Characterize worst-case charge noise under dark conditions (Ipd = 0 nA).
-* **Recommended Settings:** First, enable all input noise sources. Then, configure a coarse array samples (e.g., 100 input current steps), since the noise floor analysis focuses exclusively on the first operational point fixed at the hardware baseline pedestal current (Itotal = Ioffset = 8.4 nA), worst case.
-* **Total Simulation Time (T_sim):** Maximize the simulation run to T_sim = 6 ms or more (simulating 60+ consecutive integration windows). Accumulating a longer temporal profile is crucial to achieve the statistical realism required for accurate time-domain noise abstraction.
+* **Recommended Settings:** First, enable all input noise sources. Then, configure a coarse array samples (e.g., 10 input current steps), since the noise floor analysis focuses exclusively on the first operational point fixed at the hardware baseline pedestal current (Itotal = Ioffset = 8.4 nA), worst case.
+* **Total Simulation Time (T_sim):** Maximize the simulation run to T_sim = 10 ms or more (simulating 100+ consecutive integration windows). Accumulating a longer temporal profile is crucial to achieve the statistical realism required for accurate time-domain noise abstraction.
 
 ## 💻 Prerequisites & Installation
 
