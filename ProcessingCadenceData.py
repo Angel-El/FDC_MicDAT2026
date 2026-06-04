@@ -8,8 +8,10 @@ from scipy.stats import norm
 # print in a CSV the status of the following items
 # 'SYNC_INT_N', 'out_comp', 'nFL', and 'Iin_nA' across the tran simulation.
 
-CSV_FILE = 'datos_extraidos.csv'
-df_total = pd.read_csv(CSV_FILE)
+CSV_FILE_Chargeresolution = 'extracted_data_spectre_Chargeresolution.csv'
+CSV_FILE_noise = 'extracted_data_spectre_Noise.csv'
+CSV_FILE_INL = 'extracted_data_spectre_INL.csv'
+df_total = pd.read_csv(CSV_FILE_noise))
 df_total.columns = df_total.columns.str.strip()
 
 # Architecture and conversion constants
@@ -103,7 +105,7 @@ for corriente, datos in resultados_corners.items():
     All_nfl.extend(nfls)
     # Safely compute f_prima for each window avoiding division by zero if nfl equals 0
     f_ventana_raw = np.divide(
-        ncps - 1, nfls, out=np.zeros_like(ncps, dtype=float), where=nfls != 0)
+        ncps - 1, nfls, out = np.zeros_like(ncps, dtype=float), where = nfls != 0)
     f_ventana = f_ventana_raw[1:-1]
 
     # Save complete raw sample array
@@ -202,9 +204,9 @@ print("="*50)
 plt.figure(figsize=(8, 4))
 plt.axhline(0, color='black', linestyle='--', linewidth=1, alpha=0.6)
 plt.plot(X_Iin, inl_ppm, marker='s', color='darkblue',
-         linewidth=2, label='Cadence Spectre INL')
+         linewidth = 2, label = 'Cadence Spectre INL')
 plt.plot(X_Iin[idx_max], inl_ppm[idx_max], 'ro',
-         label=f'Worst-case: {max_inl:.2f} ppm')
+         label = f'Worst-case: {max_inl:.2f} ppm')
 plt.title('Integral Non-Linearity (INL) Profile across Input Range')
 plt.xlabel('Input Current $I_{in}$ (nA)')
 plt.ylabel('INL Error (ppm FSR)')
@@ -241,7 +243,7 @@ sigma = np.std(muestras)
 
 # Histograma normalizado
 count, bins, ignored = plt.hist(
-    muestras, bins=20, density=True, alpha=0.6, color='b', label='Measured Data, Gaussian Fit; ' f'\n$\mu$={mu:.8f}, $Qin(fC)$={Qin_fC:.8f}, $\sigma$={sigma:.8f}')
+    muestras, bins = 20, density = True, alpha = 0.6, color = 'b', label = 'Measured Data, Gaussian Fit; ' f'\n$\mu$={mu:.8f}, $Qin(fC)$={Qin_fC:.8f}, $\sigma$={sigma:.8f}')
 
 # Curva gaussiana teórica
 x = np.linspace(min(muestras), max(muestras), 100)
