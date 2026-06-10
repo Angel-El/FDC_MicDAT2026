@@ -39,8 +39,8 @@ The simulation framework is highly parameterized. To replicate the exact quantit
 
 ### 2. Charge Resolution (Qres / Qlsb) Verification
 * **Objective:** Validate the precise quantization packet sizing and threshold-crossing dynamics.
-* **Recommended Settings:** Maintain the highest time-step precision configuration to minimize discrete quantization errors during comparator firing evaluations. set stop at 9nA and 60 currents, to have a fine delta input current.
-* **Total Simulation Time (T_sim):** A long simulation run is **not required**. Set T_sim = 800 us (simulating just the very first integration window). The framework extracts the exact charge resolution metrics directly from this initial window execution.
+* **Recommended Settings:** Maintain the highest time-step precision configuration to minimize discrete quantization errors during comparator firing evaluations. set stop at 9nA and 200 currents ("muestras = 200"), to have a fine delta input current.
+* **Total Simulation Time (T_sim):** A long simulation run is **not required**. Set T_sim = 900 us (simulating just the very first integration window). The framework extracts the exact charge resolution metrics directly from this initial window execution.
 
 ### 3. Input-Referred Noise Floor Analysis
 * **Objective:** Characterize worst-case charge noise under dark conditions (Ipd = 0 nA).
