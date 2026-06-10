@@ -39,8 +39,8 @@ window_active_sync = round(Tint / clk)
 window_gap_sync = 1
 
 # --- Input Current ---
-muestras = 500
-stop = 175e-9
+muestras = 300
+stop = 8.425e-9
 Iin = np.linspace(0, stop, muestras)
 Ioffset = 8.4e-9
 current_in_y = len(Iin)
