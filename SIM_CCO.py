@@ -15,7 +15,7 @@ seed = 42
 np.random.seed(seed)
 
 # --- System Parameters ---
-T_sim = 6e-3  # Total simulation time
+T_sim = 900e-6  # Total simulation time
 Fs = 100e6
 clk = 1 / Fs  # 20 ns clock period
 Tint = 100e-6  # Integration time (100 µs)
@@ -39,19 +39,19 @@ window_active_sync = round(Tint / clk)
 window_gap_sync = 1
 
 # --- Input Current ---
-muestras = 100
+muestras = 500
 stop = 175e-9
 Iin = np.linspace(0, stop, muestras)
 Ioffset = 8.4e-9
 current_in_y = len(Iin)
 
 # --- Noise Enables ---
-enable_noise_Ioffset = 1
-enable_noise_comparator = 1
-enable_noise_cp = 1
-enable_noise_ref = 1
-enable_noise_preamp = 1
-enable_noise_ota = 1
+enable_noise_Ioffset = 0
+enable_noise_comparator = 0
+enable_noise_cp = 0
+enable_noise_ref = 0
+enable_noise_preamp = 0
+enable_noise_ota = 0
 
 # --- Preamplifier Physical Parameters ---
 I_d = 10e-6
@@ -479,7 +479,7 @@ print("="*100)
 
 # %% DATA EXTRAPOLATION AND FINAL VERIFICATIONS
 Delta_in_exp = np.diff(Ipd_matrix, axis=0)
-Tcco = nFL_mod[:, 3] * clk
+Tcco = nFL_mod[:, 0] * clk
 Delta_nFL = np.abs(nFL_mod[1, :]-nFL_mod[0, :])
 Qlsb = (Delta_in_exp[0] * Tcco[0]) / Delta_nFL[0]
 
@@ -488,3 +488,5 @@ print(
 print(
     f"Converter resolution at the first input current: {res_convertidor[0]:.2f} bits")
 print(f"Qlsb for the first input current: {Qlsb[0] * 1e15:.4f} fC/LSB")
+
+# %%
