@@ -11,7 +11,7 @@ from scipy.stats import norm
 CSV_FILE_Chargeresolution = 'extracted_data_spectre_Chargeresolution.csv'
 CSV_FILE_noise = 'extracted_data_spectre_noise.csv'
 CSV_FILE_INL = 'extracted_data_spectre_INL.csv'
-df_total = pd.read_csv(CSV_FILE_noise)
+df_total = pd.read_csv(CSV_FILE_Chargeresolution)
 df_total.columns = df_total.columns.str.strip()
 
 # Architecture and conversion constants
@@ -176,6 +176,37 @@ plt.grid(True, linestyle='--', alpha=0.5)
 plt.tight_layout()
 plt.show()
 
+# %%
+muestras = 1/muestras_por_corriente[0]
+
+
+# GainFactor, Factor que convierte 'Output Code' a 'Input Charge' en Coulombs
+# Factor para pasar de Coulombs a femtoCoulombs
+to_fC = 1e15
+muestras_fC = (muestras) * Qres * to_fC
+
+mu = np.mean(muestras)
+Qin_fC = np.std(muestras_fC)
+sigma = np.std(muestras)
+
+
+# Histograma normalizado
+count, bins, ignored = plt.hist(
+    muestras, bins=20, density=True, alpha=0.6, color='b', label='Measured Data, Gaussian Fit; ' f'\n$\mu$={mu:.8f}, $Qin(fC)$={Qin_fC:.8f}, $\sigma$={sigma:.8f}')
+
+# Curva gaussiana teórica
+x = np.linspace(min(muestras), max(muestras), 100)
+# plt.plot(x, norm.pdf(x, mu, sigma), 'r', linewidth=2,
+# label=f'Ajuste gaussiano\n$\mu$={mu:.7f}, $\sigma$={sigma:.7f}')
+
+plt.xlabel('Output Code (D_out)')
+plt.ylabel('Repetibility')
+plt.title(f'STD Code distribution, NOISE (with Ioffset, Ipd={0}), VAMS')
+plt.legend()
+plt.tight_layout()
+plt.show()
+np.save('datos_vams.npy', muestras)
+
 
 # %% 8. AUTOMATED INTEGRAL NON-LINEARITY (INL) EVALUATION
 X_Iin = np.array(corrientes)
@@ -226,34 +257,3 @@ Qlsb = (Delta_in_exp[0] * Tcco[0])/Delta_nFL
 
 
 print(f"Qres of the first inpot current: {Qlsb*1e15} fC/LSB")
-
-# %%
-muestras = 1/muestras_por_corriente[0]
-
-
-# GainFactor, Factor que convierte 'Output Code' a 'Input Charge' en Coulombs
-# Factor para pasar de Coulombs a femtoCoulombs
-to_fC = 1e15
-muestras_fC = (muestras) * Qres * to_fC
-
-mu = np.mean(muestras)
-Qin_fC = np.std(muestras_fC)
-sigma = np.std(muestras)
-
-
-# Histograma normalizado
-count, bins, ignored = plt.hist(
-    muestras, bins=20, density=True, alpha=0.6, color='b', label='Measured Data, Gaussian Fit; ' f'\n$\mu$={mu:.8f}, $Qin(fC)$={Qin_fC:.8f}, $\sigma$={sigma:.8f}')
-
-# Curva gaussiana teórica
-x = np.linspace(min(muestras), max(muestras), 100)
-# plt.plot(x, norm.pdf(x, mu, sigma), 'r', linewidth=2,
-# label=f'Ajuste gaussiano\n$\mu$={mu:.7f}, $\sigma$={sigma:.7f}')
-
-plt.xlabel('Output Code (D_out)')
-plt.ylabel('Repetibility')
-plt.title(f'STD Code distribution (with Ioffset, Ipd={0}), VAMS')
-plt.legend()
-plt.tight_layout()
-plt.show()
-np.save('datos_vams.npy', muestras)
