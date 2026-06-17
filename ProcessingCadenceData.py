@@ -11,7 +11,7 @@ from scipy.stats import norm
 CSV_FILE_Chargeresolution = 'extracted_data_spectre_Chargeresolution.csv'
 CSV_FILE_noise = 'extracted_data_spectre_noise.csv'
 CSV_FILE_INL = 'extracted_data_spectre_INL.csv'
-df_total = pd.read_csv(CSV_FILE_Chargeresolution)
+df_total = pd.read_csv(CSV_FILE_INL)
 df_total.columns = df_total.columns.str.strip()
 
 # Architecture and conversion constants
